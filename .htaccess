@@ -1,0 +1,67 @@
+Options -Indexes
+
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# --------------------------------------------------
+# SEO: Force HTTPS + canonical non-www domain
+# --------------------------------------------------
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.pce-es\.de$ [NC]
+RewriteRule ^ https://pce-es.de%{REQUEST_URI} [R=301,L]
+
+# --------------------------------------------------
+# SEO: Redirect legacy URLs directly to canonical URLs
+# --------------------------------------------------
+RewriteRule ^about/?$ /ueber-uns/ [R=301,L]
+RewriteRule ^services/?$ /leistungen/ [R=301,L]
+RewriteRule ^contact/?$ /#contact [R=301,L,NE]
+RewriteRule ^impressum-2/?$ /impressum/ [R=301,L]
+
+# --------------------------------------------------
+# SEO: Migrate old German /de URLs to German root URLs
+# --------------------------------------------------
+
+# /de or /de/ -> /
+RewriteRule ^de/?$ / [R=301,L]
+
+# /de/<path> -> /<path>
+RewriteRule ^de/(.+)$ /$1 [R=301,L]
+
+# ==================================================
+# Character Encoding
+# ==================================================
+
+AddDefaultCharset UTF-8
+
+
+# ==================================================
+# Compression - Brotli preferred, Gzip fallback
+# ==================================================
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html
+    AddOutputFilterByType BROTLI_COMPRESS text/plain
+    AddOutputFilterByType BROTLI_COMPRESS text/css
+    AddOutputFilterByType BROTLI_COMPRESS text/javascript
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript
+    AddOutputFilterByType BROTLI_COMPRESS application/json
+    AddOutputFilterByType BROTLI_COMPRESS application/xml
+    AddOutputFilterByType BROTLI_COMPRESS application/xhtml+xml
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
